@@ -1,6 +1,4 @@
-Perfect 👍
-Here are **complete, GitHub-ready notes for Day 5 – Part C (Merge Conflicts & Recovery)**.
-
+Day 5 – Part C (Merge Conflicts & Recovery)
 These notes are written **from absolute scratch → real DevOps level**, with:
 
 * clear definitions
