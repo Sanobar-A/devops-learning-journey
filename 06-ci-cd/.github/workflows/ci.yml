@@ -1,4 +1,4 @@
-name: Basic CI Pipeline
+name: Run Shell Scripts CI
 
 on:
   push:
@@ -6,13 +6,16 @@ on:
       - main
 
 jobs:
-  build:
+  run-script:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run a shell command
-        run: echo "CI pipeline is running"
+      - name: Make script executable
+        run: chmod +x 02-shell-scripting/first_script.sh
+
+      - name: Run shell script
+        run: ./02-shell-scripting/first_script.sh
 
