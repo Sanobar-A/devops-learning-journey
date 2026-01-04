@@ -271,6 +271,12 @@ jobs:
       - run: echo "OK"
 ```
 
+jobs:              ← level 0 (no spaces)
+␣␣build:           ← level 1 (2 spaces)
+␣␣␣␣steps:         ← level 2 (4 spaces)
+␣␣␣␣␣␣- run: ...   ← level 3 (6 spaces)
+
+
 ❌ Wrong:
 
 ```yaml
