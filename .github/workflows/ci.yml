@@ -1,0 +1,18 @@
+name: Run Shell Scripts CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run shell script
+        run: bash 02-shell-scripting/first-script.sh
+
