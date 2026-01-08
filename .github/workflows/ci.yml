@@ -1,4 +1,4 @@
-name: Run Shell Scripts CI
+name: Docker CI Pipeline
 
 on:
   push:
@@ -6,12 +6,21 @@ on:
       - main
 
 jobs:
-  run-script:
+  docker-build-run:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run shell script
-        run: bash 02-shell-scripting/first-script.sh
+      - name: Set up Docker
+        run: docker --version
+
+      - name: Build Docker image
+        run: |
+          cd docker/first-script
+          docker build -t first-script-image .
+
+      - name: Run Docker container
+        run: docker run first-script-image
+
