@@ -15,4 +15,6 @@ jobs:
 
       - name: Run shell script
         run: bash 02-shell-scripting/first-script.sh
+      - name: Intentional failure
+        run: ls non_existing_folder
 
