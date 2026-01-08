@@ -13,8 +13,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker
-        run: docker --version
+      - name: Debug - list repo files
+        run: |
+          pwd
+          ls
+          ls docker || echo "docker folder not found"
 
       - name: Build Docker image
         run: |
