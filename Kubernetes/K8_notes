@@ -1,0 +1,478 @@
+📘 Kubernetes Complete Notes
+(From Absolute Beginner → Real DevOps Understanding)
+1. Why Kubernetes Exists (FOUNDATION)
+The problem before Kubernetes
+
+Docker solved:
+
+Packaging applications
+
+Running containers consistently
+
+But Docker did NOT solve:
+
+Running many containers
+
+Restarting failed containers
+
+Scaling applications
+
+Zero-downtime updates
+
+Load balancing
+
+Cluster-wide management
+
+👉 Kubernetes exists to manage containers at scale.
+
+2. What is Kubernetes?
+
+Kubernetes (K8s) is a container orchestration platform.
+
+In simple words:
+
+Kubernetes manages, schedules, scales, and heals containers automatically.
+
+It focuses on:
+
+High availability
+
+Scalability
+
+Reliability
+
+Automation
+
+3. Kubernetes Mental Model (VERY IMPORTANT)
+
+Kubernetes is declarative, not imperative.
+
+You say:
+
+“I want 3 copies of my app running.”
+
+Kubernetes ensures:
+
+“3 copies are always running.”
+
+You do not manage containers directly.
+
+4. Kubernetes Cluster Architecture
+
+A cluster = multiple machines working together.
+
+Two main parts:
+
+Control Plane (Brain)
+
+Worker Nodes (Execution)
+
+5. Control Plane Components (THE BRAIN)
+5.1 API Server
+
+Entry point to Kubernetes
+
+kubectl talks to API Server
+
+All actions go through it
+
+5.2 Scheduler
+
+Decides which Pod runs on which node
+
+Based on resources, constraints, policies
+
+5.3 Controller Manager
+
+Ensures desired state
+
+Watches resources
+
+Recreates Pods if missing
+
+5.4 etcd
+
+Distributed key-value store
+
+Stores cluster state
+
+Source of truth
+
+📌 If etcd is lost → cluster is lost.
+
+6. Worker Node Components
+
+Each worker node has:
+
+6.1 Kubelet
+
+Agent running on node
+
+Talks to API server
+
+Manages Pods on that node
+
+6.2 Container Runtime
+
+Runs containers
+
+Example: containerd, Docker (older)
+
+6.3 Kube-proxy
+
+Handles networking
+
+Manages Service routing
+
+7. Pod (MOST IMPORTANT OBJECT)
+
+A Pod is:
+
+The smallest deployable unit in Kubernetes.
+
+A Pod:
+
+Contains one or more containers
+
+Shares network (IP)
+
+Shares storage (volumes)
+
+Lives and dies together
+
+📌 Kubernetes manages Pods, not containers.
+
+8. Why Pods Exist
+
+Pods allow:
+
+Sidecar containers
+
+Shared context
+
+Tight coupling
+
+Example:
+
+App container
+
+Logging container
+
+Monitoring container
+
+9. Pod Lifecycle
+
+Pod states:
+
+Pending
+
+Running
+
+Succeeded
+
+Failed
+
+CrashLoopBackOff
+
+Pods are ephemeral:
+
+They can die anytime
+
+Never rely on a single Pod
+
+10. Deployment (WHAT YOU USE DAILY)
+
+A Deployment:
+
+Manages Pods
+
+Maintains replica count
+
+Handles rolling updates
+
+Enables rollback
+
+You almost never create Pods directly in production.
+
+11. ReplicaSet (BEHIND THE SCENES)
+
+ReplicaSet:
+
+Ensures correct number of Pods
+
+Flow:
+
+Deployment → ReplicaSet → Pods
+
+
+You manage Deployment, Kubernetes manages the rest.
+
+12. Scaling in Kubernetes
+Manual scaling
+replicas: 3
+
+Imperative scaling
+kubectl scale deployment app --replicas=5
+
+Automatic scaling
+
+HPA (CPU, memory, metrics)
+
+13. Self-Healing (CORE FEATURE)
+
+If:
+
+Pod crashes
+
+Node fails
+
+Kubernetes:
+
+Detects failure
+
+Recreates Pods automatically
+
+No human intervention required.
+
+14. Rolling Updates
+
+Kubernetes updates apps without downtime.
+
+Process:
+
+Create new Pods
+
+Gradually remove old Pods
+
+Traffic always served
+
+Controlled via:
+
+maxSurge
+
+maxUnavailable
+
+15. Rollbacks (PRODUCTION-SAFE)
+
+If update fails:
+
+kubectl rollout undo deployment app
+
+
+Instant rollback to previous version.
+
+16. Service (NETWORKING CORE)
+
+Pods have:
+
+Dynamic IPs
+
+Short lifespan
+
+A Service provides:
+
+Stable IP
+
+Stable DNS
+
+Load balancing
+
+Service abstracts Pods.
+
+17. How Service Works (IMPORTANT)
+
+Service uses:
+
+Labels
+
+Selectors
+
+Traffic flow:
+
+Client → Service → Pod(s)
+
+18. Service Types (MUST KNOW)
+18.1 ClusterIP (Default)
+
+Internal access only
+
+18.2 NodePort
+
+Exposes app on node IP
+
+Dev / testing
+
+18.3 LoadBalancer
+
+Cloud environments
+
+External load balancer
+
+18.4 ExternalName
+
+Maps to external DNS
+
+19. Labels & Selectors (VERY IMPORTANT)
+
+Labels:
+
+labels:
+  app: web
+
+
+Selectors:
+
+selector:
+  app: web
+
+
+Services find Pods via labels.
+
+20. ConfigMap (APPLICATION CONFIG)
+
+ConfigMap stores:
+
+Non-sensitive config
+
+Environment variables
+
+Config files
+
+Used to avoid hardcoding config.
+
+21. Secret (SENSITIVE DATA)
+
+Secrets store:
+
+Passwords
+
+Tokens
+
+API keys
+
+Base64 encoded (not encrypted by default).
+
+22. Namespace (LOGICAL ISOLATION)
+
+Namespaces:
+
+Separate resources
+
+Logical grouping
+
+Access control
+
+Examples:
+
+dev
+
+staging
+
+prod
+
+23. Resource Requests & Limits
+
+Define CPU & memory:
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "256Mi"
+
+
+Prevents noisy neighbors.
+
+24. Kubernetes YAML Structure (STANDARD)
+
+Most objects follow:
+
+apiVersion:
+kind:
+metadata:
+spec:
+
+
+This pattern repeats everywhere.
+
+25. Declarative Model (CRITICAL)
+
+Kubernetes:
+
+Continuously compares desired vs actual state
+
+Fixes differences automatically
+
+This is why YAML + GitOps works.
+
+26. kubectl (CLI TOOL)
+
+Common commands:
+
+kubectl get
+kubectl describe
+kubectl logs
+kubectl apply
+kubectl delete
+
+
+kubectl talks to API Server.
+
+27. Debugging in Kubernetes
+
+Key debugging tools:
+
+kubectl describe
+
+kubectl logs
+
+kubectl get events
+
+Pod status
+
+Service endpoints
+
+28. Kubernetes in CI/CD
+
+Typical flow:
+
+Code → Docker → CI → Kubernetes
+
+
+CI builds image → pushes → K8s deploys.
+
+29. Kubernetes vs Docker Compose
+Docker Compose	Kubernetes
+Local	Production-grade
+Simple	Powerful
+Single host	Cluster
+Manual scaling	Auto scaling
+
+Compose → Learning tool
+Kubernetes → Production tool
+
+30. Common Beginner Mistakes
+
+❌ Managing Pods directly
+❌ Hardcoding config
+❌ No resource limits
+❌ Ignoring logs/events
+❌ Not understanding Services
+
+31. Interview-Level One-Page Summary
+
+Kubernetes manages containers
+
+Pod is smallest deployable unit
+
+Deployment manages Pods
+
+Service provides networking
+
+Self-healing & scaling built-in
+
+Declarative YAML model
+
+Designed for production
